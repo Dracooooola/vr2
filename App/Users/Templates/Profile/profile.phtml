@@ -1,0 +1,18 @@
+<?require 'Base/Templates/header.phtml';
+?>
+
+
+<div class="container">
+    <h3 class="text-center">Добавить информацию о пользователе</h3>
+    <div class="form-container">
+        <form enctype="multipart/form-data" action="" method="post">
+            <input name="avatar" type="file" /><br><br>
+            <input name="name" type="text" placeholder="Имя"> <br><br>
+            <input name="birthday" type="date" placeholder="Дата рождения"><br><br>
+            <button type="submit" name="submitavatar" class="btn btn-default">Добавить</button>
+        </form>
+    </div>
+</div><!-- /.container -->
+
+
+<? include 'Base/Templates/footer.phtml';?>

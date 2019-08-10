@@ -1,0 +1,57 @@
+<?require 'Base/Templates/header.phtml';
+use App\Users\Controller\Index as Controller;
+
+$controller = new Controller();
+$arrayImage = $controller->printImage();
+
+echo '<h3>Картинки загруженные пользоваелем</h3>';
+if(!empty($arrayImage)) {
+    foreach ($arrayImage as $key => $value) {
+        echo '<img src="' . $value . '" alt="">';
+    }
+}
+?>
+<style>
+    img {
+        max-width: 70px;
+        height: auto;
+        margin: 5px auto;
+    }
+</style>
+<div class="container">
+    <h3>Добавить картинку</h3>
+    <div class="form-container">
+        <form enctype="multipart/form-data" action="" method="post">
+            <input name="image" type="file" /><br>
+            <button type="submit" name="submitimage" class="btn btn-default">Загрузить</button>
+        </form>
+    </div>
+</div><!-- /.container -->
+
+
+<div class="container">
+      <h2>Информация выводится из базы данных</h2>
+    <form action="" method="post">
+        <input name="sort" value="<?echo $controller->getSort()?>" style="display: none">
+        <button type="submit" name="submit" class="btn btn-default">Сортировать</button>
+    </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Пользователь(логин)</th>
+          <th>Имя</th>
+          <th>возраст</th>
+          <th>Фотография</th>
+        </tr>
+          <?php foreach ($controller->printList($controller->getSort()) as $key=>$value){?>
+        <tr>
+          <td><? echo $value['email']?></td>
+          <td><? echo $value['name']?></td>
+          <td><? echo $value['birthday'] . '<br>' . $value['adulthood']?></td>
+          <td><img src="<?echo $value['avatar']?>" alt=""></td>
+        </tr>
+          <?} ?>
+      </table>
+
+    </div><!-- /.container -->
+
+<? include 'Base/Templates/footer.phtml';?>

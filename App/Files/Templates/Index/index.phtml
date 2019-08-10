@@ -1,0 +1,31 @@
+<?require 'Base/Templates/header.phtml';
+
+use App\Files\Controller\Index as Controller;
+$controller = new Controller();
+?>
+<style>
+    img {
+        max-width: 70px;
+        height: auto;
+        margin: 5px auto;
+    }
+</style>
+    <div class="container">
+      <h2>Информация выводится из списка файлов</h2>
+      <table class="table table-bordered">
+        <tr>
+          <th>Название файла</th>
+          <th>Фотография</th>
+          <th>Пользователь</th>
+        </tr>
+          <?php foreach ($controller->passFileList() as $key=>$value){?>
+              <tr>
+                  <td><? echo str_replace('/img/', '', $value['path'])?></td>
+                  <td><img src="<?echo $value['path']?>" alt=""></td>
+                  <td><? echo $value['user_email']?></td>
+              </tr>
+          <?} ?>
+      </table>
+
+    </div><!-- /.container -->
+<? include 'Base/Templates/footer.phtml';?>
