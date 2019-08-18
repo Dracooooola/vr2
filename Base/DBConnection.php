@@ -7,6 +7,7 @@
  */
 namespace Base;
 require_once 'confing.php';
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DBConnection
 {
@@ -16,6 +17,7 @@ class DBConnection
     private $_db_user;
     private $_db_password;
     private $DB;
+    private $capsule;
 
     public function __construct()
     {
@@ -24,16 +26,32 @@ class DBConnection
         $this->_db_name = DATABASE['db_name'];
         $this->_db_user = DATABASE['db_user'];
         $this->_db_password = DATABASE['db_password'];
+        $this->capsule = new Capsule();
     }
 
     public function getDB()
     {
-        try {
-            $this->DB = new \PDO("mysql:host=$this->_host;dbname=$this->_db_name", $this->_db_user, $this->_db_password);
-        } catch (PDOException $err) {
-            echo $err->getMessage();
-            die;
-        }
-        return $this->DB;
+        $this->capsule->addConnection([
+            'driver' => 'mysql',
+            'host' => $this->_host,
+            'database' => $this->_db_name,
+            'username' => $this->_db_user,
+            'password' => $this->_db_password,
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' =>  ''
+        ]);
+        $this->capsule->bootEloquent();
     }
+
+//    public function getDB()
+//    {
+//        try {
+//            $this->DB = new \PDO("mysql:host=$this->_host;dbname=$this->_db_name", $this->_db_user, $this->_db_password);
+//        } catch (PDOException $err) {
+//            echo $err->getMessage();
+//            die;
+//        }
+//        return $this->DB;
+//    }
 }

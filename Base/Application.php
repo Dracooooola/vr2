@@ -23,6 +23,9 @@ class Application
     public function run()
     {
         try {
+            $DB = new DBConnection();
+            $DB->getDB();
+
             $this->_init();
             $this->_request = new Request();
             $this->_context->setRequest($this->_request);

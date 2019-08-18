@@ -1,0 +1,72 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: vladislavklimov
+ * Date: 09/08/2019
+ * Time: 13:03
+ */
+use App\Admin\Controller\Index as Controller;
+/** @var Controller $controller */
+$controller = new Controller();
+
+require 'Base/Templates/header.phtml';
+?>
+
+<div class="container">
+
+    <div class="form-container">
+        <form class="form-horizontal" action="" method="post">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Логин</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="login" id="inputEmail3" placeholder="Логин">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Пароль</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Пароль">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" name="submit" class="btn btn-default">Добавить пользователя</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <table class="table table-bordered">
+            <tr>
+                <th>Пользователь(логин)</th>
+                <th>Пароль</th>
+                <th>Имя</th>
+                <th>Дата рождения</th>
+                <th>Фотография</th>
+                <th>Изменить</th>
+            </tr>
+            <?php foreach ($controller->printList() as $key=>$value){?>
+                    <tr>
+                        <form enctype="multipart/form-data" action="" method="post">
+                            <td><? echo $value['email']?> <input type="text" class="form-control" name="login" value="<? echo $value['email']?>" style="display: none"></td>
+                            <td><input type="text" class="form-control" name="password" placeholder="Пароль"></td>
+                            <td><? echo $value['name']?><br><input type="text" class="form-control" name="name" placeholder="Имя"></td>
+                            <td><? echo $value['birthday']?> <br> <input type="date" class="form-control" name="birthday" placeholder="Дата рождения"></td>
+                            <td><img style="max-width: 100px; max-height: 100px;" src="<?echo $value['avatar']?>" alt=""> <br>
+                                <input name="avatar" type="file" /><br>
+                            </td>
+                            <td>
+                                <button type="submit" name="submitUpdate" class="btn btn-default">Изменить</button>
+                                <button type="submit" name="delete" class="btn btn-default">Удалить</button>
+                            </td>
+                        </form>
+                    </tr>
+            <?} ?>
+        </table>
+    </div><!-- /.container -->
+
+
+</div><!-- /.container -->
+    </div><!-- /.container -->
+<? include 'Base/Templates/footer.phtml';?>

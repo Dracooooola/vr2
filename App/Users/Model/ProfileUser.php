@@ -8,26 +8,18 @@
 
 namespace App\Users\Model;
 use Base;
+use Base\Eloquent\User as UserDB;
 
 class ProfileUser
 {
     public function saveData($name, $birthday, $path)
     {
-        /** @var \PDO $db*/
-        $db = new Base\DBConnection();
-        $db = $db->getDB();
-
         $login = $_SESSION['login'];
 
-        $query = 'UPDATE `users` SET `name`=:username, `birthday`=:birthday, `avatar`=:avatar WHERE `email`=:login';
-
-        $result = $db->prepare($query);
-        $result->bindParam(':username', $name, \PDO::PARAM_STR);
-        $result->bindParam(':birthday', $birthday, \PDO::PARAM_STR);
-        $result->bindParam(':avatar', $path, \PDO::PARAM_STR);
-        $result->bindParam(':login', $login, \PDO::PARAM_STR);
-        $result->execute();
-
-
+        $user = UserDB::find($login);
+        $user->name = $name;
+        $user->birthday = $birthday;
+        $user->avatar = $path;
+        $user->save();
     }
 }

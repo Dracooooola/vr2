@@ -8,48 +8,32 @@
 
 namespace App\Users\Model;
 use Base;
+use Base\Eloquent\User as UserDB;
+use Base\Eloquent\File as FileDB;
 
 class User
 {
     public function saveData($path, $login)
     {
-        /** @var \PDO $db*/
-        $db = new Base\DBConnection();
-        $db = $db->getDB();
-
-        $query = 'INSERT INTO `files` (user_email, path) VALUES (:user_email, :path)';
-
-        $result = $db->prepare($query);
-        $result->bindParam(':user_email', $login, \PDO::PARAM_STR);
-        $result->bindParam(':path', $path, \PDO::PARAM_STR);
-        $result->execute();
+        $data =[
+            'user_email' => $login,
+            'path' => $path
+        ];
+        FileDB::create($data);
     }
 
     public function getImagesList($login)
     {
-        /** @var \PDO $db*/
-        $db = new Base\DBConnection();
-        $db = $db->getDB();
+        $result = FileDB::query()->where('user_email', '=', $login)->get();
+        $result = $result->toArray();
 
-        $query = 'SELECT * FROM `files` WHERE `user_email` = :user_email';
-
-        $result = $db->prepare($query);
-        $result->bindParam(':user_email', $login, \PDO::PARAM_STR);
-        $result->execute();
-        $resultArr = $result->fetchAll();
-        return $resultArr;
+        return $result;
     }
 
     public function getUsersDesc()
     {
-        $db = new Base\DBConnection();
-        $db = $db->getDB();
-
-        $query = 'SELECT * FROM `users` ORDER BY `birthday` DESC';
-
-        $result = $db->prepare($query);
-        $result->execute();
-        $resultArr = $result->fetchAll();
+        $user = UserDB::query()->orderBy('birthday', 'desc')->get();
+        $resultArr = $user->toArray();
 
         for($i=0; $i<count($resultArr); $i++){
             $resultArr[$i]['birthday'] = $this->getFullYears($resultArr[$i]['birthday']);
@@ -64,14 +48,8 @@ class User
 
     public function getUsersAsc()
     {
-        $db = new Base\DBConnection();
-        $db = $db->getDB();
-
-        $query = 'SELECT * FROM `users` ORDER BY `birthday` ASC';
-
-        $result = $db->prepare($query);
-        $result->execute();
-        $resultArr = $result->fetchAll();
+        $user = UserDB::query()->orderBy('birthday', 'desc')->get();
+        $resultArr = $user->toArray();
 
         for($i=0; $i<count($resultArr); $i++){
             $resultArr[$i]['birthday'] = $this->getFullYears($resultArr[$i]['birthday']);

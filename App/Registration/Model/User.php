@@ -7,44 +7,34 @@
  */
 namespace App\Registration\Model;
 use Base;
+use Base\Eloquent\User as UserDB;
 
 class User
 {
 
     public function checkEmail($email)
     {
-        /** @var \PDO $db*/
-        $db = new Base\DBConnection();
-        $db = $db->getDB();
+        $user = UserDB::query()->where('email', '=', $email)->get();
+        $user = $user->toArray();
 
-        $query = 'SELECT * FROM `users` WHERE `email` = :email';
-
-        $result = $db->prepare($query);
-        $result->bindParam(':email', $email, \PDO::PARAM_STR);
-        $result->execute();
-        $user = $result->fetch();
-
-        if($user) return true;
+        var_dump($user[0]['email']);
+        if($user[0]['email']) return true;
         else return false;
     }
 
     public static function register($login, $password)
     {
-        $db = new Base\DBConnection();
-        /** @var \PDO $db*/
-        $db = $db->getDB();
-
 
         /** @var  Base\Auth $getHash*/
         $getHash = new Base\Auth();
         $userPassword = $getHash->getHash($password);
 
-        $query = 'INSERT INTO `users` (email, password) VALUES (:email, :password)';
+        $data =[
+            'email' => $login,
+            'password' => $userPassword
+        ];
+        UserDB::create($data);
+        return true;
 
-        $result = $db->prepare($query);
-        $result->bindParam(':email', $login, \PDO::PARAM_STR);
-        $result->bindParam(':password', $userPassword, \PDO::PARAM_STR);
-
-        return $result->execute();
     }
 }
