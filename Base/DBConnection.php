@@ -41,6 +41,7 @@ class DBConnection
             'collation' => 'utf8_unicode_ci',
             'prefix' =>  ''
         ]);
+        $this->capsule->setAsGlobal();
         $this->capsule->bootEloquent();
     }
 
